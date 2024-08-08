@@ -2,6 +2,12 @@
 
 Basic libraries for manipulating point cloud.
 
+## Installation
+
+```sh
+pip install git+https://github.com/HiraiKyo/ply-processor-basics
+```
+
 ## Methods
 
 ### Vector
