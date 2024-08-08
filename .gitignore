@@ -1,3 +1,7 @@
+matrix/
+points/
+pcd/
+
 .mypy_cache/
 .env
 .env.local

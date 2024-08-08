@@ -1,28 +1,17 @@
-# pyproject-boilerplate
+# ply-processor-basics
 
-Boilerplate for Python Project
+Basic libraries for manipulating point cloud.
 
-## Purpose
+## Methods
 
-- Type-safe
-- Good lint rules.
-- Well-developed with VSCode
+### Vector
 
-## Stacks
+#### `vector.normalize`
 
-- Poetry
-- Ruff
-- Mypy, Pydantic
-- Pytest
+### Points
 
-## Structure
+#### `points.rotate_euler`
 
-## Installation
+#### `points.get_distances_line`
 
-```sh
-poetry install
-```
-
-## References
-
-- [https://qiita.com/tamo_breaker/items/dbd8482e88c61269d531]
+#### `points.get_distances_plane`
