@@ -27,3 +27,5 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 #### `points.transform_to_plane_coordinates`
 
 #### `points.get_distances_to_line`
+
+#### `points.get_distances_to_plane`
