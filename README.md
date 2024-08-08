@@ -29,3 +29,5 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 #### `points.get_distances_to_line`
 
 #### `points.get_distances_to_plane`
+
+#### `points.rotate_euler`
