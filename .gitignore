@@ -1,5 +1,3 @@
-pcd/
-
 .mypy_cache/
 .env
 .env.local
