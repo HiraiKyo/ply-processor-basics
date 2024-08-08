@@ -15,6 +15,18 @@ jobs:
         PR_URL: ${{ github.event.pull_request.html_url }}
         PR_ACTION: ${{ github.event.action }}
       run: |
-        curl -X POST -H "Content-Type: application/json" -d '{
-          "text": "Pull Request ${{ env.PR_ACTION }}:\n${{ env.PR_TITLE }}\n${{ env.PR_URL }}"
-        }' ${{ env.WEBHOOK_URL }}
+        if [ -z "$WEBHOOK_URL" ]; then
+          echo "Error: WEBHOOK_URL is not set. Please check your GitHub Secrets."
+          exit 1
+        fi
+
+        MESSAGE="Pull Request $PR_ACTION:\\n$PR_TITLE\\n$PR_URL"
+
+        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -d "{\"text\": \"$MESSAGE\"}" "$WEBHOOK_URL")
+
+        if [ "$RESPONSE" != "200" ]; then
+          echo "Error: Failed to send notification. HTTP status code: $RESPONSE"
+          exit 1
+        else
+          echo "Notification sent successfully"
+        fi
