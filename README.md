@@ -10,14 +10,18 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 
 ## Methods
 
+### STL
+
+#### `stl.stl2ply`
+
 ### Vector
 
 #### `vector.normalize`
 
+### Matrix
+
+#### `matrix.get_rotation_from_vectors`
+
 ### Points
 
-#### `points.rotate_euler`
-
-#### `points.get_distances_line`
-
-#### `points.get_distances_plane`
+#### `points.transform_to_plane_coordinates`
