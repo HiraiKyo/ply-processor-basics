@@ -28,13 +28,11 @@ def clip_by_plane(
                 (d - mean[0] * a - mean[1] * b) / c,
             ]
         )
-    print(origin)
     points, _ = transform_to_plane_coordinates(points, origin, plane_eq[:3])
 
     # 点を多く含む側を返す
     points_intp = np.where(points[:, 2] >= 0.0)[0]
     points_intp_inv = np.where(points[:, 2] < 0.0)[0]
-    print(len(points_intp), len(points_intp_inv))
     if len(points_intp) < len(points_intp_inv):
         tmp = points_intp
         points_intp = points_intp_inv

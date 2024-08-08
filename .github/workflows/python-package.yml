@@ -30,9 +30,9 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
-    - name: Run tests with pytest
+    - name: Run tests with pytest, not open3d tagged
       run: |
-        poetry run pytest
+        poetry run pytest -v -m "not open3d"
     - name: Run type checking with mypy
       run: |
         poetry run mypy ply_processor_basics

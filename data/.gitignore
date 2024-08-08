@@ -1,3 +1,4 @@
 !.gitignore
 !samples/
 samples/stl2ply.ply
+samples/sample.png
