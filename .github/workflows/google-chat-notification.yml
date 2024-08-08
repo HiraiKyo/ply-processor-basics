@@ -1,0 +1,21 @@
+name: Google Chat Notification
+
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send notification to Google Chat
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        text: |
+          Pull Request ${{ github.event.action }}:
+          ${{ github.event.pull_request.title }}
+          ${{ github.event.pull_request.html_url }}
+        webhook_url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
