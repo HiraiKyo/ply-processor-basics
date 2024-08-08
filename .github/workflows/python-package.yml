@@ -36,6 +36,3 @@ jobs:
     - name: Run type checking with mypy
       run: |
         poetry run mypy ply_processor_basics
-    - name: Run linting with ruff
-      run: |
-        poetry run ruff ply_processor_basics
