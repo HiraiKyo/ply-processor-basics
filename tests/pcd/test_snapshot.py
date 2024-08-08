@@ -2,10 +2,12 @@ import os
 
 import numpy as np
 import open3d as o3d
+import pytest
 
 from ply_processor_basics.pcd import snapshot
 
 
+@pytest.mark.open3d
 def test_simple():
     pcd = o3d.io.read_point_cloud("data/samples/sample.ply")
     pcd.paint_uniform_color([0.5, 0.5, 0.5])
