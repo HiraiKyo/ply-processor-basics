@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Send notification to Google Chat
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        text: |
-          Pull Request ${{ github.event.action }}:
-          ${{ github.event.pull_request.title }}
-          ${{ github.event.pull_request.html_url }}
-        webhook_url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+        PR_TITLE: ${{ github.event.pull_request.title }}
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        PR_ACTION: ${{ github.event.action }}
+      run: |
+        curl -X POST -H "Content-Type: application/json" -d '{
+          "text": "Pull Request ${{ env.PR_ACTION }}:\n${{ env.PR_TITLE }}\n${{ env.PR_URL }}"
+        }' ${{ env.WEBHOOK_URL }}
