@@ -1,5 +1,6 @@
 #!/usr/bin/env /usr/bin/python3
 
+import os
 from typing import List
 
 import numpy as np
@@ -7,8 +8,20 @@ import open3d as o3d
 
 
 def stl2ply(
-    name: str, cam_dir: List[float] = [-100.0, -100, 100], sample_points: int = 1000000, voxel_size: float = 1.0
+    name: str,
+    cam_dir: List[float] = [-100.0, -100, 100],
+    sample_points: int = 1000000,
+    voxel_size: float = 1.0,
+    outdir="out",
 ):
+    """
+    Convert a .stl file to a .ply file, output at `out` directory
+    :param name: name of the .stl file
+    :param cam_dir: camera direction
+    :param sample_points: number of points to sample
+    :param voxel_size: size of the voxel
+    :return: None
+    """
     mesh = o3d.io.read_triangle_mesh(name + ".stl")
     mesh.compute_vertex_normals()
     pcd = mesh.sample_points_uniformly(number_of_points=sample_points)
@@ -22,4 +35,5 @@ def stl2ply(
 
     pcd = pcdd.select_by_index(pt_map)
 
-    o3d.io.write_point_cloud(name + ".ply", pcd)
+    os.makedirs(outdir, exist_ok=True)
+    o3d.io.write_point_cloud(f"{outdir}/{name}.ply", pcd)
