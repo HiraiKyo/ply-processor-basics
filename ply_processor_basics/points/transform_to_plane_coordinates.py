@@ -19,8 +19,6 @@ def transform_to_plane_coordinates(
     :param normal: 平面の法線ベクトル (3,)
     :return: 変換後の点群 (N, 3), 逆変換行列 (4, 4)
     """
-    points_raw = points
-
     # 法線ベクトルを正規化
     normal = normal / np.linalg.norm(normal)
 
@@ -28,7 +26,7 @@ def transform_to_plane_coordinates(
     z_axis = normal
 
     transformation_matrix = np.eye(4)
-    points = points_raw - origin
+    transformation_matrix[:3, 3] = origin
     transformation_matrix[:3, :3] = get_rotation_from_vectors(np.array([0, 0, 1]), z_axis[:3])
     transformation_matrix_inv = np.linalg.inv(transformation_matrix)
 
