@@ -1,6 +1,5 @@
 #!/usr/bin/env /usr/bin/python3
 
-import os
 from typing import List
 
 import numpy as np
@@ -12,11 +11,10 @@ def stl2ply(
     cam_dir: List[float] = [-100.0, -100, 100],
     sample_points: int = 1000000,
     voxel_size: float = 1.0,
-    outdir="out",
 ):
     """
-    Convert a .stl file to a .ply file, output at `out` directory
-    :param name: name of the .stl file
+    STLファイルをカメラ方向から見た点群に変換し、PLYファイル出力する関数
+    :param name: name of the .stl file, example="data/samples/sample"
     :param cam_dir: camera direction
     :param sample_points: number of points to sample
     :param voxel_size: size of the voxel
@@ -35,5 +33,4 @@ def stl2ply(
 
     pcd = pcdd.select_by_index(pt_map)
 
-    os.makedirs(outdir, exist_ok=True)
-    o3d.io.write_point_cloud(f"{outdir}/{name}.ply", pcd)
+    o3d.io.write_point_cloud(f"{name}.ply", pcd)
