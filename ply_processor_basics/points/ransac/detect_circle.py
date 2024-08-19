@@ -28,6 +28,7 @@ def detect_circle(
     # 2. 3点をランダムサンプリングし、円の方程式を求める
     # 3. 円内に含まれる点の密度を計算し、密度閾値以上である最大円を算出する
     # 4. 最大円の内部に含まれる点を返す
+    assert abs(plane_model[2]) > 1e-6
     origin = np.asarray([0, 0, plane_model[3] / plane_model[2]])
     points_rotated, inv_matrix = transform_to_plane_coordinates(points, origin, plane_model[:3])
     points_xy = points_rotated[:, :2]
@@ -81,5 +82,5 @@ def detect_circle(
     best_center = np.dot(inv_matrix, np.hstack([best_center, 1]).T).T
 
     # 中心点から半径距離にある点を抽出
-    inliers = np.linalg.norm(points - best_center[:3], axis=1) < best_radius
-    return inliers, best_center[:3], best_radius
+    best_inliers = np.linalg.norm(points - best_center[:3], axis=1) < best_radius
+    return best_inliers, best_center[:3], best_radius

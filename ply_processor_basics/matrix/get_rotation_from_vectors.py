@@ -16,15 +16,14 @@ def get_rotation_from_vectors(vec1: NDArray[np.float32], vec2: NDArray[np.float3
         The rotation matrix from vec1 to vec2.
     """
     # vec1 -> vec2 の回転ベクトルを導出
-    b = normalize(vec1[:3])
-    a = normalize(vec2[:3])
+    a = normalize(vec1[:3])
+    b = normalize(vec2[:3])
     if np.allclose(a, b):
         return np.eye(3)
-    cross = np.cross(a, b)
-    dot = np.dot(a, b)
-    angle = np.arccos(dot)
-    rotvec = normalize(cross) * angle
-    # 回転行列を導出
-    rotation_matrix = Rotation.from_rotvec(rotvec).as_matrix()
+    if np.allclose(a, -b):
+        perpendicular = normalize(np.array([1, 0, 0]) if np.allclose(a, [0, 0, 1]) else np.cross([0, 0, 1], a))
+        return Rotation.from_rotvec(np.pi * perpendicular).as_matrix()
+    axis = normalize(np.cross(a, b))
+    angle = np.arccos(np.clip(np.dot(a, b), -1.0, 1.0))
 
-    return rotation_matrix
+    return Rotation.from_rotvec(axis * angle).as_matrix()

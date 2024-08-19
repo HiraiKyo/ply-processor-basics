@@ -20,18 +20,19 @@ def transform_to_plane_coordinates(
     :return: 変換後の点群 (N, 3), 逆変換行列 (4, 4)
     """
     # 法線ベクトルを正規化
-    normal = normal / np.linalg.norm(normal)
-
-    # Z軸方向の単位ベクトル
-    z_axis = normal
+    z_axis = normal / np.linalg.norm(normal)
 
     transformation_matrix = np.eye(4)
-    transformation_matrix[:3, 3] = origin
-    transformation_matrix[:3, :3] = get_rotation_from_vectors(np.array([0, 0, 1]), z_axis[:3])
+    rotation = get_rotation_from_vectors(
+        z_axis[:3],
+        np.array([0, 0, 1]),
+    )
+    transformation_matrix[:3, 3] = -np.dot(rotation, origin)
+    transformation_matrix[:3, :3] = rotation
     transformation_matrix_inv = np.linalg.inv(transformation_matrix)
 
     # アフィン変換のために4x1に変換
-    points = np.concatenate([points, np.ones((points.shape[0], 1))], axis=1)
+    points = np.hstack([points, np.ones((points.shape[0], 1))])
     points = np.dot(transformation_matrix, points.T).T
 
     return points[:, :3], transformation_matrix_inv
