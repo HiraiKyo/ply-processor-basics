@@ -7,8 +7,19 @@ import open3d as o3d
 
 
 def stl2ply(
-    name: str, cam_dir: List[float] = [-100.0, -100, 100], sample_points: int = 1000000, voxel_size: float = 1.0
+    name: str,
+    cam_dir: List[float] = [-100.0, -100, 100],
+    sample_points: int = 1000000,
+    voxel_size: float = 1.0,
 ):
+    """
+    STLファイルをカメラ方向から見た点群に変換し、PLYファイル出力する関数
+    :param name: name of the .stl file, example="data/samples/sample"
+    :param cam_dir: camera direction
+    :param sample_points: number of points to sample
+    :param voxel_size: size of the voxel
+    :return: None
+    """
     mesh = o3d.io.read_triangle_mesh(name + ".stl")
     mesh.compute_vertex_normals()
     pcd = mesh.sample_points_uniformly(number_of_points=sample_points)
@@ -22,4 +33,4 @@ def stl2ply(
 
     pcd = pcdd.select_by_index(pt_map)
 
-    o3d.io.write_point_cloud(name + ".ply", pcd)
+    o3d.io.write_point_cloud(f"{name}.ply", pcd)
