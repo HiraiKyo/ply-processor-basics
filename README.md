@@ -34,8 +34,15 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 
 #### `points.clip_by_plane`
 
-#### `points.ransac_plane`
+#### `points.ransac.detect_plane`
 
 ### Open3d
 
 #### `pcd.snapshot`
+
+## サンプルデータ寸法
+
+- 円柱中心: (49.0, 52.0)
+- 円柱半径: 17.5
+- 円柱高さ: 40.0
+- エッジ面: 122.0

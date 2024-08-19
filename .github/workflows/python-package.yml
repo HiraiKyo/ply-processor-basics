@@ -32,7 +32,7 @@ jobs:
         poetry install --no-interaction
     - name: Run tests with pytest, not open3d tagged
       run: |
-        poetry run pytest -v -m "not open3d"
+        poetry run pytest -m "not open3d and not visual"
     - name: Run type checking with mypy
       run: |
         poetry run mypy ply_processor_basics
