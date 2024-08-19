@@ -17,11 +17,12 @@ def detect_circle(
     """
     平面上の点群から最大円をRANSACで検出する関数
 
-    :param points: a set of points
-
+    :param points: 点群(N, 3)
+    :param plane_model: 平面の方程式(4, )
+    :param density_threshold: 円内に含まれる点の密度閾値
+    :param voxel_size: 格子点のサイズ
+    :param max_iteration: RANSACの最大繰り返し回数
     :return: 検出した円の点ポインタ(N, ), 円中心座標(N, 3), 円半径
-
-    検出失敗時は None を返す
     """
     # 方針: 平面上の点群をXY平面に射影し、RANSACで円を検出する
     # 1. 平面上の点群をXY平面に射影し、格子点にする

@@ -7,6 +7,7 @@ from ply_processor_basics.vector import normalize
 
 def get_rotation_from_vectors(vec1: NDArray[np.float32], vec2: NDArray[np.float32]):
     """_summary_
+    2つのベクトルから回転行列を求める関数
 
     Args:
         vec1: The vector from.

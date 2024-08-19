@@ -36,6 +36,8 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 
 #### `points.ransac.detect_plane`
 
+#### `points.ransac.detect_circle`
+
 ### Open3d
 
 #### `pcd.snapshot`

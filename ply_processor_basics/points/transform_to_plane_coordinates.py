@@ -12,7 +12,7 @@ def transform_to_plane_coordinates(
     points: NDArray[np.floating], origin: NDArray[np.floating], normal: NDArray[np.floating]
 ) -> Tuple[NDArray[np.floating], NDArray[np.floating]]:
     """
-    点群を平面上の1点を原点とし、法線方向をZ軸とする座標系に変換する。
+    点群を、平面上の1点を原点とし法線方向をZ軸とする座標系に変換する。
 
     :param points: 変換する点群 (N, 3)
     :param origin: 新しい座標系の原点 (3,)
