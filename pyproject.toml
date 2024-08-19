@@ -1,5 +1,4 @@
 [tool.taskipy.tasks]
-test = {cmd = "pytest -m 'not visual' 'not open3d'", help = "Run unit test."}
 dev-python = {cmd = "dotenv --file envs/.env.development run -- python", help = "Run python with dev environment."}
 
 [tool.poetry]
