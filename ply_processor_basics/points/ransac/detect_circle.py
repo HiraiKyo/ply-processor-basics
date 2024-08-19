@@ -29,7 +29,7 @@ def detect_circle(
     # 3. 円内に含まれる点の密度を計算し、密度閾値以上である最大円を算出する
     # 4. 最大円の内部に含まれる点を返す
     assert abs(plane_model[2]) > 1e-6
-    origin = np.asarray([0, 0, plane_model[3] / plane_model[2]])
+    origin = np.asarray([0, 0, -plane_model[3] / plane_model[2]])
     points_rotated, inv_matrix = transform_to_plane_coordinates(points, origin, plane_model[:3])
     points_xy = points_rotated[:, :2]
 
