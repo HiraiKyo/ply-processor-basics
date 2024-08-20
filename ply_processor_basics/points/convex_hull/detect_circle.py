@@ -19,7 +19,7 @@ def detect_circle(
     :return: 円の中心(3,), 法線ベクトル(3,), 半径
     """
 
-    inliers = detect_plane_edge(points, plane_model)
+    inliers, lines = detect_plane_edge(points, plane_model)
     centers = []
     normals = []
     radiuses = []

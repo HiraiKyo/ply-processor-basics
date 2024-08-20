@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 from numpy.typing import NDArray
 from scipy.spatial import ConvexHull
@@ -5,7 +7,9 @@ from scipy.spatial import ConvexHull
 from ply_processor_basics.points import transform_to_plane_coordinates
 
 
-def detect_plane_edge(points: NDArray[np.floating], plane_model: NDArray[np.floating]):
+def detect_plane_edge(
+    points: NDArray[np.floating], plane_model: NDArray[np.floating]
+) -> Tuple[NDArray[np.intp], NDArray[np.intp]]:
     """
     ConvexHullを用いて平面上のエッジ点を抽出する
 
@@ -23,4 +27,5 @@ def detect_plane_edge(points: NDArray[np.floating], plane_model: NDArray[np.floa
     hull = ConvexHull(points_xy)
 
     inliers = hull.vertices
-    return inliers
+    lines = hull.simplices
+    return inliers, lines
