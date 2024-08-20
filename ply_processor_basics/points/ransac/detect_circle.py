@@ -1,3 +1,4 @@
+import datetime
 import math
 from typing import Tuple
 
@@ -13,7 +14,7 @@ def detect_circle(
     density_threshold: float = 0.8,
     voxel_size: float = 1.0,
     max_iteration: int = 10000,
-) -> Tuple[NDArray[np.floating], NDArray[np.floating], float]:
+) -> Tuple[NDArray[np.floating], NDArray[np.floating], NDArray[np.floating], float]:
     """
     平面上の点群から最大円をRANSACで検出する関数
 
@@ -22,7 +23,7 @@ def detect_circle(
     :param density_threshold: 円内に含まれる点の密度閾値
     :param voxel_size: 格子点のサイズ
     :param max_iteration: RANSACの最大繰り返し回数
-    :return: 検出した円の点ポインタ(N, ), 円中心座標(N, 3), 円半径
+    :return: 検出した円の点ポインタ(N, ), 円中心座標(3, ), 円法線(3, ), 円半径
     """
     # 方針: 平面上の点群をXY平面に射影し、RANSACで円を検出する
     # 1. 平面上の点群をXY平面に射影し、格子点にする
@@ -46,6 +47,7 @@ def detect_circle(
     best_radius = 0
     best_center = np.zeros(2)
     for i in range(max_iteration):
+        np.random.seed(datetime.datetime.now().microsecond)
         sample_points = grid_points[np.random.choice(len(grid_points), 3, replace=False)]
         # 3点から円の方程式を求める
         p1 = sample_points[0]
@@ -84,4 +86,6 @@ def detect_circle(
 
     # 中心点から半径距離にある点を抽出
     best_inliers = np.linalg.norm(points - best_center[:3], axis=1) < best_radius
-    return best_inliers, best_center[:3], best_radius
+
+    normal = plane_model[:3] / np.linalg.norm(plane_model[:3])
+    return best_inliers, best_center[:3], normal, best_radius

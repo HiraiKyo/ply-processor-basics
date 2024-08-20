@@ -3,59 +3,29 @@ import open3d as o3d
 import pytest
 from scipy import stats
 
-from ply_processor_basics.points.ransac import detect_circle, detect_plane
-
-
-@pytest.mark.parametrize("plypath", ["data/samples/sample_circle.ply"])
-@pytest.mark.parametrize("expected_center", [[49.0, 52.0, 50.0]])
-@pytest.mark.parametrize("expected_radius", [17.5])
-@pytest.mark.visual
-def test_visualize(plypath, expected_center, expected_radius):
-    pcd = o3d.io.read_point_cloud(plypath)
-    points = np.asarray(pcd.points)
-    inliers_plane, plane_model = detect_plane(points)
-    inliers, center, normal, radius = detect_circle(points[inliers_plane], plane_model)
-
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(points[inliers_plane][inliers])
-    # 円を描画
-    cylinder = o3d.geometry.TriangleMesh.create_cylinder(radius=radius, height=0.01)
-    direction = plane_model[:3] / np.linalg.norm(plane_model[:3])
-
-    # 方向ベクトルに基づいて回転行列を計算
-    z_axis = np.array([0, 0, 1])
-    rotation_axis = np.cross(z_axis, direction)
-    rotation_angle = np.arccos(np.dot(z_axis, direction))
-    rotation_matrix = o3d.geometry.get_rotation_matrix_from_axis_angle(rotation_axis * rotation_angle)
-
-    # 円筒を回転させ、指定された方向に合わせる
-    cylinder.rotate(rotation_matrix, center=(0, 0, 0))
-
-    # 円筒を指定された中心位置に移動
-    cylinder.translate(center)
-
-    # 座標軸の作成
-    coordinate_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=1.0, origin=[0, 0, 0])
-
-    # パラメータの表示
-    print("Plane model: ", plane_model)
-    print("Measured: ", center, "r: ", radius)
-    print("Expected: ", expected_center, "r: ", expected_radius)
-    o3d.visualization.draw_geometries([pcd, cylinder, coordinate_frame])
+from ply_processor_basics.points.convex_hull import detect_circle
+from ply_processor_basics.points.convex_hull.detect_circle import fit_circle
+from ply_processor_basics.points.ransac import detect_plane
 
 
 @pytest.mark.parametrize("plypath", ["data/samples/sample_circle.ply"])
 def test_success(plypath):
     pcd = o3d.io.read_point_cloud(plypath)
     points = np.asarray(pcd.points)
-    inliers_plane, plane_model = detect_plane(points)
-    inliers, center, normal, radius = detect_circle(points[inliers_plane], plane_model)
+    inliers, plane_model = detect_plane(points, 1.0)
+    inliers, center, normal, radius = detect_circle(points[inliers], plane_model)
+
+
+@pytest.mark.parametrize("points", [np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])])
+def test_circle(points):
+    center, normal, radius = fit_circle(points)
+    assert np.allclose(center, [0.5, 0.5, 0])
 
 
 @pytest.mark.parametrize("plypath", ["data/samples/sample_circle.ply"])
 @pytest.mark.parametrize("expected_center", [[49.0, 52.0, 50.0]])
 @pytest.mark.parametrize("expected_radius", [17.5])
-@pytest.mark.parametrize("tolerance", [10.0])
+@pytest.mark.parametrize("tolerance", [10.0, 1.0])
 def test_strict(plypath, expected_center, expected_radius, tolerance):
     pcd = o3d.io.read_point_cloud(plypath)
     points = np.asarray(pcd.points)
