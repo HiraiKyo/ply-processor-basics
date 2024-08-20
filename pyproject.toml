@@ -47,7 +47,7 @@ testpaths = [
 ]
 
 [[tool.mypy.overrides]]
-module = ["open3d", "pandas", "sklearn", "sklearn.cluster", "scipy.spatial.transform", "scipy"]
+module = ["open3d", "pandas", "sklearn", "sklearn.cluster", "scipy.spatial.transform", "scipy.spatial", "scipy"]
 ignore_missing_imports = true
 
 [build-system]
