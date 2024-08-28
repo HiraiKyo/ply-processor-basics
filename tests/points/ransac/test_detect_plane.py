@@ -12,7 +12,7 @@ def test_success():
     assert model is not None
     assert len(inliers) > 10000
     assert len(model) == 4
-    # およそZ軸方向に平面の法線ベクトルが向いていることを確認
+    # サンプルデータはZ軸方向に平面の法線ベクトルが向いている
     normalized = model[:3] / np.linalg.norm(model[:3])
     # normalizedが[0, 0, 1]もしくは[0, 0, -1]に近いことを確認
     assert np.allclose(normalized, [0, 0, 1], atol=0.1) or np.allclose(normalized, [0, 0, -1], atol=0.1)
