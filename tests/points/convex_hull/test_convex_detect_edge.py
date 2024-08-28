@@ -12,7 +12,7 @@ def test_visualize(plypath):
     pcd = o3d.io.read_point_cloud(plypath)
     points = np.asarray(pcd.points)
     inliers, plane_model = detect_plane(points, 1.0)
-    edge_inliers = detect_plane_edge(points[inliers], plane_model)
+    edge_inliers, lines = detect_plane_edge(points[inliers], plane_model)
 
     pcd2 = o3d.geometry.PointCloud()
     pcd2.points = o3d.utility.Vector3dVector(points[inliers][edge_inliers])
@@ -42,7 +42,7 @@ def test_success(plypath):
     pcd = o3d.io.read_point_cloud(plypath)
     points = np.asarray(pcd.points)
     inliers, plane_model = detect_plane(points)
-    edge_inliers = detect_plane_edge(points[inliers], plane_model)
+    edge_inliers, lines = detect_plane_edge(points[inliers], plane_model)
 
     assert len(points[inliers][edge_inliers]) > 0
 
@@ -71,7 +71,7 @@ def test_visualize_realdata(plypath):
     pcd_ = o3d.geometry.PointCloud()
     pcd_.points = o3d.utility.Vector3dVector(points)
     o3d.visualization.draw_geometries([pcd_])
-    edge_inliers = detect_plane_edge(points, plane_model)
+    edge_inliers, lines = detect_plane_edge(points, plane_model)
 
     pcd2 = o3d.geometry.PointCloud()
     pcd2.points = o3d.utility.Vector3dVector(points[edge_inliers])
