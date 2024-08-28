@@ -5,7 +5,7 @@ Basic libraries for manipulating point cloud.
 ## Installation
 
 ```sh
-pip install git+https://github.com/HiraiKyo/ply-processor-basics@v0.1.0#egg=ply_processor_basics
+pip install git+https://github.com/HiraiKyo/ply-processor-basics@v0.2.0#egg=ply_processor_basics
 ```
 
 ## Methods
