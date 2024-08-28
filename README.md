@@ -46,6 +46,8 @@ TDD開発時にopen3dで表示を確認しつつ進める場合には、その�
 
 #### `points.clip_by_plane`
 
+#### `points.plane_clustering`
+
 #### `points.ransac.detect_plane`
 
 #### `points.ransac.detect_circle`
