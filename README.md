@@ -5,20 +5,8 @@ Basic libraries for manipulating point cloud.
 ## Installation
 
 ```sh
-pip install git+https://github.com/HiraiKyo/ply-processor-basics
+pip install git+https://github.com/HiraiKyo/ply-processor-basics@v0.1.0#egg=ply_processor_basics
 ```
-
-## Development
-
-### Running test
-
-`visual`タグはopen3d.geometry等で表示を確認する用なので、テスト実行時は外す
-
-```sh
-poetry run pytest -s {filepath} -m "not visual"
-```
-
-TDD開発時にopen3dで表示を確認しつつ進める場合には、そのテストに`@pytest.mark.visual`タグを付けて自動テストに影響しないようにする。
 
 ## Methods
 
@@ -55,6 +43,28 @@ TDD開発時にopen3dで表示を確認しつつ進める場合には、その�
 ### Open3d
 
 #### `pcd.snapshot`
+
+## Development
+
+### Setup
+
+1. Install `poetry`
+
+2. Install dependencies
+
+```sh
+poetry install
+```
+
+### Running test
+
+`visual`タグはopen3d.geometry等で表示を確認する用なので、テスト実行時は外す
+
+```sh
+poetry run pytest -s {filepath} -m "not visual"
+```
+
+TDD開発時にopen3dで表示を確認しつつ進める場合には、そのテストに`@pytest.mark.visual`タグを付けて自動テストに影響しないようにする。
 
 ## サンプルデータ寸法
 
