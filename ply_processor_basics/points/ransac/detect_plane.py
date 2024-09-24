@@ -38,7 +38,7 @@ class Plane:
         self.inliers = []
         self.equation = []
 
-    def fit(self, pts, thresh=0.1, minPoints=100, maxIteration=1000):
+    def fit(self, pts, thresh=0.1, minPoints=100, maxIteration=1000, normal_samples=10):
         n_points = pts.shape[0]
         best_eq = []
         best_inliers = []
@@ -77,5 +77,29 @@ class Plane:
 
         if len(self.inliers) < minPoints:
             return [], []
+
+        # # 抽出点群から平面方程式を再推定
+        # pt_samples = pts[self.inliers]
+        # idx = np.random.choice(len(pt_samples), (normal_samples, 3), replace=True)
+        # vecA = pt_samples[idx[:, 1]] - pt_samples[idx[:, 0]]
+        # vecB = pt_samples[idx[:, 2]] - pt_samples[idx[:, 0]]
+        # normals = np.cross(vecA, vecB)
+        # norms = np.linalg.norm(normals, axis=1)
+
+        # # 有効な法線ベクトルのみを選択（ノルムが閾値以上）
+        # mask = norms > 1e-6
+        # valid_normals = normals[mask]
+        # valid_norms = norms[mask, np.newaxis]
+
+        # normal_samples = valid_normals / valid_norms
+        # normal_samples = ensure_consistent_direction(normal_samples)
+        # normal = estimate_vector(normal_samples)
+
+        # assert np.linalg.norm(normal) > 1e-6
+
+        # # 平面方程式の最終推定
+        # centroid = np.mean(pt_samples, axis=0)
+        # d = -np.dot(normal, centroid)
+        # self.equation = np.hstack([normal, d])
 
         return self.equation, self.inliers

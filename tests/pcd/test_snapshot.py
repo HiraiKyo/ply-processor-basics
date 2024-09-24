@@ -7,7 +7,9 @@ import pytest
 from ply_processor_basics.pcd import snapshot
 
 
+# Skip because open3d 0.13 not viable. 0.18 is required.")
 @pytest.mark.open3d
+@pytest.mark.skip
 def test_simple():
     pcd = o3d.io.read_point_cloud("data/samples/sample.ply")
     pcd.paint_uniform_color([0.5, 0.5, 0.5])

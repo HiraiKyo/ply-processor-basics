@@ -8,18 +8,6 @@ Basic libraries for manipulating point cloud.
 pip install git+https://github.com/HiraiKyo/ply-processor-basics
 ```
 
-## Development
-
-### Running test
-
-`visual`タグはopen3d.geometry等で表示を確認する用なので、テスト実行時は外す
-
-```sh
-poetry run pytest -s {filepath} -m "not visual"
-```
-
-TDD開発時にopen3dで表示を確認しつつ進める場合には、そのテストに`@pytest.mark.visual`タグを付けて自動テストに影響しないようにする。
-
 ## Methods
 
 ### STL
@@ -29,6 +17,14 @@ TDD開発時にopen3dで表示を確認しつつ進める場合には、その�
 ### Vector
 
 #### `vector.normalize`
+
+#### `vector.estimate_vector`
+
+ベクトルの集合から四分位範囲で平均ベクトルを算出する
+
+#### `vector.ensure_consistent_direction`
+
+基準ベクトル方向にベクトル群を反転する（法線ベクトルが2種類出る対応に用いる）
 
 ### Matrix
 
@@ -62,3 +58,15 @@ TDD開発時にopen3dで表示を確認しつつ進める場合には、その�
 - 円柱半径: 17.5
 - 円柱高さ: 40.0
 - エッジ面: 122.0
+
+## Development
+
+### Running test
+
+`visual`タグはopen3d.geometry等で表示を確認する用なので、テスト実行時は外す
+
+```sh
+poetry run pytest -s {filepath} -m "not visual"
+```
+
+TDD開発時にopen3dで表示を確認しつつ進める場合には、そのテストに`@pytest.mark.visual`タグを付けて自動テストに影響しないようにする。

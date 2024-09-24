@@ -30,18 +30,24 @@ def snapshot(
 
     for pcd in pcds:
         vis.add_geometry(pcd)
-
+    print(vis)
     opt = vis.get_render_option()
-    opt.show_coordinate_frame = True
-    opt.mesh_show_back_face = True
-    opt.mesh_show_wireframe = True
-    opt.background_color = np.asarray([1, 1, 1])
+    if opt is None:
+        print("[ply_processor_basics] Open3d Warning: No render option")
+    else:
+        opt.show_coordinate_frame = True
+        opt.mesh_show_back_face = True
+        opt.mesh_show_wireframe = True
+        opt.background_color = np.asarray([1, 1, 1])
 
     ctr = vis.get_view_control()
-    ctr.set_zoom(cam_zoom)
-    ctr.set_front(cam_front)
-    ctr.set_lookat(cam_lookat)
-    ctr.set_up(cam_up)
+    if ctr is None:
+        print("[ply_processor_basics] Open3d Warning: No view control")
+    else:
+        ctr.set_zoom(cam_zoom)
+        ctr.set_front(cam_front)
+        ctr.set_lookat(cam_lookat)
+        ctr.set_up(cam_up)
 
     for pcd in pcds:
         vis.update_geometry(pcd)
