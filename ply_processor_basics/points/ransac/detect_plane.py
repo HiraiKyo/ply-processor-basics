@@ -35,7 +35,7 @@ def detect_plane(
     # 平面方程式を算出
     normal = get_normal_vector(points[inliers])
     center = np.mean(points[inliers], axis=0)
-    plane_model = np.asarray([normal[0], normal[1], normal[2], np.dot(normal, center)])
+    plane_model = np.asarray([normal[0], normal[1], normal[2], -np.dot(normal, center)])
     return inliers, plane_model
 
 
