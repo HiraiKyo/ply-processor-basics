@@ -5,6 +5,8 @@ from typing import Tuple, Union
 import numpy as np
 from numpy.typing import NDArray
 
+from ply_processor_basics.points import get_normal_vector
+
 
 def detect_plane(
     points: NDArray[np.floating],
@@ -25,22 +27,24 @@ def detect_plane(
     """
     plane = Plane()
 
-    plane_model, inliers = plane.fit(points, thresh=threshold, minPoints=minPoints, maxIteration=maxIteration)
+    inliers = plane.fit(points, thresh=threshold, minPoints=minPoints, maxIteration=maxIteration)
 
-    if plane_model == []:
+    if len(inliers) == 0:
         return None, None
 
+    # 平面方程式を算出
+    normal = get_normal_vector(points[inliers])
+    center = np.mean(points[inliers], axis=0)
+    plane_model = np.asarray([normal[0], normal[1], normal[2], np.dot(normal, center)])
     return inliers, plane_model
 
 
 class Plane:
     def __init__(self):
         self.inliers = []
-        self.equation = []
 
     def fit(self, pts, thresh=0.1, minPoints=100, maxIteration=1000, normal_samples=10):
         n_points = pts.shape[0]
-        best_eq = []
         best_inliers = []
 
         for it in range(maxIteration):
@@ -69,13 +73,11 @@ class Plane:
 
             pt_id_inliers = np.where(np.abs(dist_pt) <= thresh)[0]
             if len(pt_id_inliers) > len(best_inliers):
-                best_eq = plane_eq
                 best_inliers = pt_id_inliers
 
         self.inliers = best_inliers
-        self.equation = best_eq
 
         if len(self.inliers) < minPoints:
-            return [], []
+            return []
 
-        return self.equation, self.inliers
+        return self.inliers

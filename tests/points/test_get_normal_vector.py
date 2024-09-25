@@ -27,5 +27,5 @@ def test_simple(normal, points):
     normal_vector = get_normal_vector(points)
     # 法線ベクトルの正規化
     normal_vector = normal_vector / np.linalg.norm(normal_vector)
-    # 法線ベクトルの一致を確認
-    assert np.allclose(normal_vector, normal, 1e-1)
+    # 法線ベクトルの一致を確認(法線ベクトルは2種類)
+    assert np.allclose(normal_vector, normal, 1e-1) or np.allclose(normal_vector, -normal, 1e-1)
