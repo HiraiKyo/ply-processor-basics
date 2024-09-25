@@ -38,6 +38,10 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 
 #### `points.get_distances_to_plane`
 
+#### `points.get_normal_vector`
+
+点群から法線ベクトルを算出する。
+
 #### `points.rotate_euler`
 
 #### `points.clip_by_plane`
