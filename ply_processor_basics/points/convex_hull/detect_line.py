@@ -3,65 +3,71 @@ from typing import List, Tuple
 import numpy as np
 from numpy.typing import NDArray
 
+from ply_processor_basics.points.ransac import detect_line
 from ply_processor_basics.vector import normalize
 
 from .detect_plane_edge import detect_plane_edge
 
 
-def detect_line(
-    points: NDArray[np.floating], plane_model: NDArray[np.floating], epsilon: float = 1.0
-) -> Tuple[NDArray[np.intp], NDArray[np.intp], List]:
+def detect_edge_as_line(
+    points: NDArray[np.floating],
+    plane_model: NDArray[np.floating],
+    threshold: float = 0.5,
+    expected_edges: int = 4,
+    edge_density: int = 5,
+) -> List[Tuple[NDArray[np.intp], NDArray[np.floating], NDArray[np.floating]]]:
     """
-    ConvexHullを用いて平面上の直線検出
+    ConvexHullを用いて平面の外形直線検出
 
     :param points: 点群(N, 3)
     :param plane_model: 平面モデル(4,)
-    :param epsilon: Douglas-Peuckerのepsilon
-    :return: エッジ点のポインタ(N, ), エッジの線分ポインタ(N, 2), 直線の方程式p+tv(p:点, v:方向ベクトル)
+    :param expected_edges: 期待されるエッジ数
+    :param edge_density: エッジ点の密度(詳細はREADME.md参照)
+    Returns:
+        List[Tuple]: 各エッジに関する以下の情報を含むタプルのリスト
+            1. エッジ点のポインタ: shape (N,) の numpy 配列
+            2. エッジの線分: shape (2, 3) の numpy 配列
+            3. エッジの直線方程式 p+tv=0: shape (2, 3) の numpy 配列
     """
-    inliers, lines = detect_plane_edge(points, plane_model)
+    return_list: List[Tuple[NDArray[np.intp], NDArray[np.floating], NDArray[np.floating]]] = []
 
-    # 輪郭線を可能な限り角の少ない多角形に近似
-    simplified_indices = np.array(ramer_douglas_peucker(points, inliers, epsilon))
+    # エッジ点を抽出
+    edge_inliers = np.array([], dtype=np.intp)
+    for _ in range(edge_density):
+        outliers = np.where(np.logical_not(np.isin(np.arange(len(points)), edge_inliers)))[0]
+        inliers, _ = detect_plane_edge(points[outliers], plane_model)
+        edge_inliers = np.concatenate([edge_inliers, outliers[inliers]])
 
-    simplified_lines = []
-    for i in range(len(simplified_indices) - 1):
-        simplified_lines.append([simplified_indices[i], simplified_indices[i + 1]])
+    # 抽出点から直線を検出
+    for i in range(expected_edges):
+        tmp_inliers, line_model = detect_line(points[edge_inliers], threshold=threshold)
+        inliers = edge_inliers[tmp_inliers]
 
-    # 直線の方程式を算出する
-    line_models = []
-    for line in simplified_lines:
-        p1 = points[line[0]]
-        p2 = points[line[1]]
-        v = p2 - p1
-        v = normalize(v)
-        line_models.append((p1, v))
-    return simplified_indices, np.array(simplified_lines), line_models
+        # 線分検出失敗時はこれまでの計算結果のみを返す
+        if line_model is None:
+            return return_list
 
+        # ノイズ対応、直線上の線分端点を取得
+        # FIXME: 点数が少なすぎてDBSCANクラスタリングが使えない
+        # clusters = line_clustering(points[inliers], min_samples=1)
+        # if len(clusters) == 0:
+        #     continue
+        # cluster = clusters[0]
+        cluster = inliers
 
-def ramer_douglas_peucker(points: NDArray[np.floating], inliers: NDArray[np.intp], epsilon: float) -> NDArray[np.intp]:
-    """
-    Ramer-Douglas-Peuckerアルゴリズム
-    """
-    points_raw = points[inliers]
+        p, v = line_model
+        projected_points = np.dot(points[cluster] - p, v)  # 点pから直線上の点への射影距離
+        sorted_indices = np.argsort(projected_points)
+        sorted_points = points[cluster[sorted_indices]]
+        start_point: NDArray[np.floating] = sorted_points[0]
+        end_point: NDArray[np.floating] = sorted_points[-1]
 
-    def recursive(start_index, end_index):
-        dmax = 0
-        index = start_index
-        for i in range(start_index + 1, end_index):
-            d = point_line_distance(points_raw[i], points_raw[start_index], points_raw[end_index])
-            if d > dmax:
-                index = i
-                dmax = d
+        return_list.append((cluster, np.array([start_point, end_point]), line_model))
 
-        if dmax > epsilon:
-            results = recursive(start_index, index) + recursive(index, end_index)[1:]
-        else:
-            results = [inliers[start_index], inliers[end_index]]
+        # 検出した線分をエッジ点から消去
+        edge_inliers = edge_inliers[np.where(np.logical_not(np.isin(edge_inliers, cluster)))[0]]
 
-        return results
-
-    return np.array(recursive(0, len(inliers) - 1))
+    return return_list
 
 
 def point_line_distance(point, start, end):

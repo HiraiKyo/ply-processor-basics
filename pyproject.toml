@@ -3,7 +3,7 @@ dev-python = {cmd = "dotenv --file envs/.env.development run -- python", help = 
 
 [tool.poetry]
 name = "ply_processor_basics"
-version = "0.4.0"
+version = "0.5.0"
 description = ""
 authors = ["HiraiKyo <kyo.mikhael@gmail.com>"]
 license = "MIT"
