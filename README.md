@@ -52,6 +52,20 @@ pip install git+https://github.com/HiraiKyo/ply-processor-basics
 
 #### `points.ransac.detect_circle`
 
+WARN: Deprecated
+
+`points.convex_hull.detect_circle`を使ってください。
+
+#### `points.ransac.detect_line`
+
+#### `points.convex_hull.detect_circle`
+
+#### `points.convex_hull.detect_plane`
+
+#### `points.convex_hull.detect_line`
+
+updated 0.5.0: changed return type
+
 ### Open3d
 
 #### `pcd.snapshot`
@@ -74,3 +88,11 @@ poetry run pytest -s {filepath} -m "not visual"
 ```
 
 TDD開発時にopen3dで表示を確認しつつ進める場合には、そのテストに`@pytest.mark.visual`タグを付けて自動テストに影響しないようにする。
+
+### Merge Request Checklist
+
+- [] Pytest written and passed.
+- [] Types written.
+- [] Docstring written.
+- [] `README.md` updated if added new API.
+- [] `__init__.py` updated if added new API.
