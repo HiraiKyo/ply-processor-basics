@@ -1,6 +1,7 @@
 from .clip_by_plane import clip_by_plane as clip_by_plane
 from .clustering import line_clustering as line_clustering
 from .clustering import plane_clustering as plane_clustering
+from .downsampler import voxel_grid_filter as voxel_grid_filter
 from .get_distances_to_line import get_distances_to_line as get_distances_to_line
 from .get_distances_to_plane import get_distances_to_plane as get_distances_to_plane
 from .get_normal_vector import get_normal_vector as get_normal_vector
@@ -16,5 +17,7 @@ __all__ = [
     "get_normal_vector",
     "rotate_euler",
     "transform_to_plane_coordinates",
-    "ransac" "convex_hull",
+    "voxel_grid_filter",
+    "ransac",
+    "convex_hull",
 ]

@@ -21,7 +21,7 @@ test_vectors = np.asarray([[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0]])
 
 @pytest.mark.visual
 @pytest.mark.parametrize("points", [test_points])
-@pytest.mark.parametrize("edge_density", [1, 2, 5, 10])
+@pytest.mark.parametrize("edge_density", [15])
 def test_visualize(points, edge_density):
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
