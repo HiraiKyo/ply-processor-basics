@@ -3,6 +3,8 @@ name: Google Chat Notification
 on:
   pull_request:
     types: [opened, reopened, closed]
+    branches:
+      - main
 
 jobs:
   notify:
