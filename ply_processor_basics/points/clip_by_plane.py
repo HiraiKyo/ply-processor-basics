@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from .transform_to_plane_coordinates import transform_to_plane_coordinates
+from .transformer import transform_to_plane_coordinates
 
 
 def clip_by_plane(
