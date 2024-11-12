@@ -8,6 +8,15 @@ Basic libraries for manipulating point cloud.
 pip install git+https://github.com/HiraiKyo/ply-processor-basics
 ```
 
+### Machine Learnings
+
+必要であれば機械学習系ライブラリを導入する。`ml`を含むメソッドがこれに相当する。
+
+```sh
+pip install "git+https://github.com/HiraiKyo/ply-processor-basics[ml]"
+git clone https://github.com/isl-org/Open3D-ML.git
+```
+
 ## Methods
 
 ### STL

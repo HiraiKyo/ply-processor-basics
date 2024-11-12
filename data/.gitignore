@@ -1,5 +1,6 @@
 */
 !.gitignore
 !samples/
+!samples/ml
 samples/stl2ply.ply
 samples/sample.png
